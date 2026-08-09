@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYVORA — Autonomous AI Technology Persona</title>
+    <meta name="description" content="AI that watches what changes next. An autonomous AI technology observer that discovers, filters, remembers and publishes technical intelligence independently.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- INITIALIZATION CONFIGURATION SCREEN -->
+        <main id="configScreen" class="view-screen active">
+            <div class="hero-header">
+                <div class="brand-badge">AUTONOMOUS AI PERSONA</div>
+                <h1 class="brand-title">NYVORA</h1>
+                <p class="brand-tagline">"AI that watches what changes next."</p>
+                <p class="brand-desc">Configure Nyvora once. Then let it observe, filter, remember and publish technical intelligence independently over time without human prompts.</p>
+            </div>
+
+            <div class="config-card">
+                <div class="card-header-badge">
+                    <span class="icon">⚙️</span>
+                    <span>INITIAL CONFIGURATION</span>
+                </div>
+
+                <form id="initForm" class="config-form">
+                    <div class="form-grid">
+                        <!-- Persona Name -->
+                        <div class="form-group">
+                            <label for="personaName">PERSONA NAME</label>
+                            <input type="text" id="personaName" name="personaName" value="Nyvora" required placeholder="e.g. Nyvora">
+                        </div>
+
+                        <!-- Domain -->
+                        <div class="form-group">
+                            <label for="personaDomain">DOMAIN</label>
+                            <input type="text" id="personaDomain" name="personaDomain" value="AI & Technology" required placeholder="e.g. AI & Technology">
+                        </div>
+                    </div>
+
+                    <!-- Areas of Interest -->
+                    <div class="form-group">
+                        <label for="personaInterests">AREAS OF INTEREST</label>
+                        <textarea id="personaInterests" name="personaInterests" rows="3" placeholder="Core research topics...">AI agents, LLMs, AI security, AI infrastructure, open-source AI, developer tools, robotics</textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <!-- Editorial Voice -->
+                        <div class="form-group">
+                            <label for="editorialVoice">EDITORIAL VOICE</label>
+                            <select id="editorialVoice" name="editorialVoice">
+                                <option value="Technical & Analytical" selected>Technical & Analytical</option>
+                                <option value="Research-Oriented">Research-Oriented</option>
+                                <option value="Developer-Focused">Developer-Focused</option>
+                                <option value="Critical & Skeptical">Critical & Skeptical</option>
+                                <option value="AI Industry Analyst">AI Industry Analyst</option>
+                            </select>
+                        </div>
+
+                        <!-- Publishing Interval -->
+                        <div class="form-group">
+                            <label for="publishingInterval">PUBLISHING INTERVAL</label>
+                            <select id="publishingInterval" name="publishingInterval">
+                                <option value="1" selected>1 minute (Testing mode)</option>
+                                <option value="5">5 minutes</option>
+                                <option value="10">10 minutes</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Editorial Instructions -->
+                    <div class="form-group">
+                        <label for="editorialInstructions">EDITORIAL INSTRUCTIONS</label>
+                        <textarea id="editorialInstructions" name="editorialInstructions" rows="3" placeholder="Filtering directives...">Focus on meaningful technical developments. Avoid generic AI hype, repetitive announcements and purely promotional content.</textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="initBtn" class="btn btn-primary btn-large">
+                        <span class="btn-text">INITIALIZE NYVORA</span>
+                        <span class="btn-icon">⚡</span>
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <!-- LOADING MODAL / OVERLAY -->
+        <div id="loadingOverlay" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="spinner"></div>
+                <h3 id="loadingStageTitle" class="loading-title">INITIALIZING AGENT</h3>
+                <p id="loadingStageSubtitle" class="loading-subtitle">Establishing persona state and connecting to live tech discovery feeds...</p>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVE BENTO DASHBOARD -->
+        <main id="dashboardScreen" class="view-screen hidden">
+            <!-- Top Command Bar -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h2 id="dashBrandTitle" class="dash-title">NYVORA</h2>
+                    <span class="dash-tagline">"AI that watches what changes next."</span>
+                </div>
+                
+                <div class="header-right">
+                    <div class="status-pill active" id="agentStatusPill">
+                        <span class="status-dot"></span>
+                        <span id="agentStatusText">AUTONOMOUS</span>
+                    </div>
+                    <div class="agent-id-badge" title="Click to copy Agent ID" id="copyAgentIdBtn">
+                        <span class="label">ID:</span>
+                        <span id="displayAgentId">...</span>
+                        <span class="copy-icon">📋</span>
+                    </div>
+                    <button id="resetAgentBtn" class="btn btn-outline btn-sm">New Agent</button>
+                </div>
+            </header>
+
+            <!-- Metrics Bento Row -->
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">TOPICS DISCOVERED</div>
+                    <div class="metric-value" id="mDiscovered">0</div>
+                    <div class="metric-sub">Live Public Feeds</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">TOPICS EVALUATED</div>
+                    <div class="metric-value" id="mEvaluated">0</div>
+                    <div class="metric-sub">Persona Scored</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">TOPICS REJECTED</div>
+                    <div class="metric-value warning" id="mRejected">0</div>
+                    <div class="metric-sub">Below Quality Bar</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">TOPICS PUBLISHED</div>
+                    <div class="metric-value success" id="mPublished">0</div>
+                    <div class="metric-sub">Persisted Posts</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">SELECTIVITY RATE</div>
+                    <div class="metric-value cyan" id="mSelectivity">0%</div>
+                    <div class="metric-sub">Rejection Ratio</div>
+                </div>
+                <div class="metric-card col-span-mobile">
+                    <div class="metric-label">CYCLE SCHEDULE</div>
+                    <div class="metric-sub-group">
+                        <div><span class="lbl">Last:</span> <span id="mLastCycle" class="val">Never</span></div>
+                        <div><span class="lbl">Next:</span> <span id="mNextCycle" class="val highlight">In Progress</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bento Dashboard Main Grid -->
+            <div class="bento-grid">
+                
+                <!-- Main Feed Panel -->
+                <section class="bento-card feed-card col-span-2">
+                    <div class="bento-card-header">
+                        <div class="title-group">
+                            <span class="icon">📰</span>
+                            <h3>LATEST INTELLIGENCE</h3>
+                        </div>
+                        <div class="live-feed-badge">
+                            <span class="pulse-dot"></span>
+                            <span>Auto-refreshing Feed</span>
+                        </div>
+                    </div>
+                    
+                    <div id="feedList" class="feed-list">
+                        <!-- Dynamic feed posts rendered here -->
+                        <div class="empty-feed-placeholder">
+                            <div class="spinner-sm"></div>
+                            <p>Nyvora's autonomous background worker is observing live sources and evaluating candidate topics...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Editorial Judgment Panel -->
+                <section class="bento-card decisions-card">
+                    <div class="bento-card-header">
+                        <div class="title-group">
+                            <span class="icon">⚖️</span>
+                            <h3>EDITORIAL JUDGMENT</h3>
+                        </div>
+                        <span class="subtitle-badge">0–100 Scoring</span>
+                    </div>
+                    <div id="decisionsList" class="decisions-list">
+                        <p class="placeholder-text">Awaiting editorial decisions...</p>
+                    </div>
+                </section>
+
+                <!-- Real-time Agent Activity Log -->
+                <section class="bento-card activity-card">
+                    <div class="bento-card-header">
+                        <div class="title-group">
+                            <span class="icon">⚡</span>
+                            <h3>AUTONOMOUS ACTIVITY</h3>
+                        </div>
+                        <span class="subtitle-badge">Live Worker Log</span>
+                    </div>
+                    <div id="activityList" class="activity-list">
+                        <p class="placeholder-text">Initializing worker activity log...</p>
+                    </div>
+                </section>
+
+                <!-- Memory & Covered Topics Panel -->
+                <section class="bento-card memory-card">
+                    <div class="bento-card-header">
+                        <div class="title-group">
+                            <span class="icon">🧠</span>
+                            <h3>AGENT MEMORY</h3>
+                        </div>
+                        <span class="subtitle-badge">SQLite Persisted</span>
+                    </div>
+                    <div id="memoryList" class="memory-list">
+                        <p class="placeholder-text">Awaiting memory records...</p>
+                    </div>
+                </section>
+
+                <!-- Nyvora Command (Optional User Direction) -->
+                <section class="bento-card command-card col-span-full">
+                    <div class="bento-card-header">
+                        <div class="title-group">
+                            <span class="icon">🎯</span>
+                            <h3>NYVORA COMMAND (DYNAMIC DIRECTION)</h3>
+                        </div>
+                        <span class="subtitle-badge">Optional Influence</span>
+                    </div>
+                    <form id="directionForm" class="command-form">
+                        <div class="command-input-wrapper">
+                            <input type="text" id="commandInput" placeholder='e.g. "Focus more on AI security and open-source agent frameworks."' required>
+                            <button type="submit" id="updateDirBtn" class="btn btn-secondary">UPDATE DIRECTION</button>
+                        </div>
+                        <p class="command-note">Note: Nyvora continues operating autonomously. Directions adjust future research preferences without triggering artificial posts.</p>
+                    </form>
+                </section>
+
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
