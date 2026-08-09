@@ -1,0 +1,6 @@
+{
+  "name": "Nyvora — Autonomous AI Tech Persona",
+  "description": "An autonomous AI technology observer that independently discovers live tech developments, evaluates candidate topics against strict editorial standards, and publishes structured intelligence with verified sources.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
